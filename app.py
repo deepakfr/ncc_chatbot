@@ -541,26 +541,23 @@ def ask_groq(prompt):
         "Content-Type": "application/json"
     }
     data = {
-        "model": GROQ_MODEL,
-        "messages": [{"role": "user", "content": prompt}],
+        "model": "mixtral-8x7b",  # Use the short version
+        "messages": [
+            {"role": "user", "content": "What time is check-in?"}
+        ],
         "temperature": 0.5
     }
 
     try:
-        res = requests.post(url, json=data, headers=headers)
-        res.raise_for_status()  # raises error if status != 200
-
-        json_data = res.json()
-        if "choices" in json_data:
-            return json_data["choices"][0]["message"]["content"]
-        else:
-            st.error("❌ Unexpected response format from Groq API.")
-            st.json(json_data)
-            return "Sorry, I couldn’t understand your question. Please rephrase it."
+        res = requests.post(url, headers=headers, json=data)
+        res.raise_for_status()
+        return res.json()["choices"][0]["message"]["content"]
 
     except requests.exceptions.RequestException as e:
         st.error(f"🚨 Network/API error: {e}")
-        return "There was a problem contacting the assistant. Please try again later."
+        st.code(res.text)  # Show raw response for debugging
+        return "Sorry, we couldn't process your request."
+
 
 
 # --- Streamlit UI ---
