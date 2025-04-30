@@ -543,7 +543,7 @@ Saturday: 9:00am - 8:00pm
 
 # --- Function to call Groq
 def ask_groq(prompt):
-    url = "https://api.groq.com/openai/v1/chat/completions"  # ← URL correcte
+    url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
@@ -555,17 +555,18 @@ def ask_groq(prompt):
 
     try:
         res = requests.post(url, headers=headers, json=payload)
-        res.raise_for_status()  # Lève une exception si code HTTP ≠ 200
-
+        res.raise_for_status()
         data = res.json()
+
         if "choices" in data and data["choices"]:
             return data["choices"][0]["message"]["content"]
         else:
             return "Erreur : aucune réponse retournée par l'API."
     except requests.exceptions.RequestException as e:
-        return f"Erreur lors de la requête API : {e}"
+        return f"Erreur API : {e}"
     except KeyError as e:
-        return f"Erreur : clé manquante dans la réponse – {e}"
+        return f"Erreur dans le traitement de la réponse : {e}"
+
 
 
 # --- Streamlit UI ---
