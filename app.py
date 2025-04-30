@@ -42,6 +42,7 @@ FAQ EN FRANÇAIS
 12. 🚫 Fêtes/interdits → Non autorisées.
 13. 💳 Caution → Empreinte bancaire temporaire, libérée après le départ.
 
+
 Question FAQ 1 :
 
 📍À quelle heure puis-je effectuer mon check-in ?
@@ -538,23 +539,21 @@ Saturday: 9:00am - 8:00pm
 
 
 
-
 """
 
 # --- Function to call Groq
 def ask_groq(prompt):
-    url = "https://api.groq.com/openai/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "model": GROQ_MODEL,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.5
-    }
-    res = requests.post(url, json=data, headers=headers)
-    return res.json()["choices"][0]["message"]["content"]
+    res = requests.post(...)  # ou tout autre appel
+    data = res.json()
+    
+    if "choices" in data and len(data["choices"]) > 0:
+        choice = data["choices"][0]
+        if "message" in choice and "content" in choice["message"]:
+            return choice["message"]["content"]
+        else:
+            return "Erreur : réponse inattendue (message ou content manquant)."
+    else:
+        return "Erreur : aucune réponse retournée par l'API."
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="NC FAQ Chatbot", page_icon="🤖")
