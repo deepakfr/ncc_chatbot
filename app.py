@@ -567,19 +567,26 @@ st.markdown("Posez vos questions / Ask your questions (🇫🇷 / 🇬🇧)")
 
 user_input = st.text_input("💬 Votre question ici / Type your question here:")
 
-if user_input:
-    lang = detect(user_input)
-    prompt = f"""
-You are a polite multilingual FAQ assistant for NC Conciergerie.
+user_input = st.text_input("💬 Your question:")
 
-User language: {lang.upper()}
-FAQ knowledge base:
+if user_input:
+    language = detect(user_input)
+
+    prompt = f"""
+You are a multilingual FAQ assistant for NC Conciergerie.
+
+ONLY use the FAQ content below to answer. If the answer is NOT in the FAQ, say:
+→ In English: "Sorry, I couldn't find an answer to your question."
+→ In French: "Désolé, je n'ai pas trouvé de réponse à votre question."
+
+FAQ:
 {faq_context}
 
-User's question:
-{user_input}
+User language: {language.upper()}
+User question: {user_input}
 
-Respond in the user's language. Keep it short, friendly, and accurate.
+Reply in the same language as the user.
 """
-    answer = ask_groq(prompt)
-    st.markdown(f"**🧠 Réponse / Answer:**\n\n{answer}")
+
+    answer = ask_groq_faq_only(prompt)
+    st.markdown(f"**🧠 Answer / Réponse :**\n\n{answer}")
