@@ -533,7 +533,6 @@ Saturday: 9:00am - 8:00pm
 
 """
 
-# --- Function to call Groq
 def ask_groq(prompt):
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
@@ -541,11 +540,11 @@ def ask_groq(prompt):
         "Content-Type": "application/json"
     }
     data = {
-        "model": "llama3-8b-8192",  # Use the short version
+        "model": GROQ_MODEL,
         "messages": [
-            {"role": "user", "content": "What time is check-in?"}
+            {"role": "user", "content": prompt}
         ],
-        "temperature": 0.5
+        "temperature": 0.3
     }
 
     try:
@@ -555,10 +554,7 @@ def ask_groq(prompt):
 
     except requests.exceptions.RequestException as e:
         st.error(f"🚨 Network/API error: {e}")
-        st.code(res.text)  # Show raw response for debugging
         return "Sorry, we couldn't process your request."
-
-
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="NC FAQ Chatbot", page_icon="🤖")
@@ -566,8 +562,6 @@ st.title("🤖 NC Conciergerie – FAQ Chatbot")
 st.markdown("Posez vos questions / Ask your questions (🇫🇷 / 🇬🇧)")
 
 user_input = st.text_input("💬 Votre question ici / Type your question here:")
-
-user_input = st.text_input("💬 Your question:")
 
 if user_input:
     language = detect(user_input)
@@ -585,8 +579,8 @@ FAQ:
 User language: {language.upper()}
 User question: {user_input}
 
-Reply in the same language as the user.
+Reply in the same language as the user. Be short, clear, and helpful.
 """
 
-    answer = ask_groq_faq_only(prompt)
+    answer = ask_groq(prompt)
     st.markdown(f"**🧠 Answer / Réponse :**\n\n{answer}")
