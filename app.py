@@ -543,17 +543,30 @@ Saturday: 9:00am - 8:00pm
 
 # --- Function to call Groq
 def ask_groq(prompt):
-    res = requests.post(...)  # ou tout autre appel
-    data = res.json()
-    
-    if "choices" in data and len(data["choices"]) > 0:
-        choice = data["choices"][0]
-        if "message" in choice and "content" in choice["message"]:
-            return choice["message"]["content"]
+    url = "https://api.groq.com/openai/v1/chat/completions"  # ← URL correcte
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": GROQ_MODEL,
+        "messages": [{"role": "user", "content": prompt}]
+    }
+
+    try:
+        res = requests.post(url, headers=headers, json=payload)
+        res.raise_for_status()  # Lève une exception si code HTTP ≠ 200
+
+        data = res.json()
+        if "choices" in data and data["choices"]:
+            return data["choices"][0]["message"]["content"]
         else:
-            return "Erreur : réponse inattendue (message ou content manquant)."
-    else:
-        return "Erreur : aucune réponse retournée par l'API."
+            return "Erreur : aucune réponse retournée par l'API."
+    except requests.exceptions.RequestException as e:
+        return f"Erreur lors de la requête API : {e}"
+    except KeyError as e:
+        return f"Erreur : clé manquante dans la réponse – {e}"
+
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="NC FAQ Chatbot", page_icon="🤖")
