@@ -4,7 +4,7 @@ from langdetect import detect
 
 # --- Groq API config ---
 GROQ_API_KEY = "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"
-GROQ_MODEL = "mixtral-8x7b-32768"
+GROQ_MODEL = "llama3-8b-8192"
 
 # --- Bilingual FAQ Content ---
 faq_context = """
