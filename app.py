@@ -3,7 +3,7 @@ import requests
 from langdetect import detect
 
 # --- Groq API config ---
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 GROQ_MODEL = "mixtral-8x7b-32768"
 
 # --- Bilingual FAQ Content ---
