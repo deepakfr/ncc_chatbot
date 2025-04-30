@@ -8,39 +8,6 @@ GROQ_MODEL = "llama3-8b-8192"
 
 # --- Bilingual FAQ Content ---
 faq_context = """
-ENGLISH FAQ
-
-1. What time is check-in? → Between 4 PM and 8 PM. A concierge agent will contact you via WhatsApp on arrival day.
-2. Is there luggage storage? → Yes. €15 large, €7.50 cabin, €5 small. Book via WhatsApp: +33 6 66 41 52 23.
-3. Early check-in? → Yes if available: €40 (6-13h), €25 (13-15h), free after 16h.
-4. Late check-in? → €25 (20-23h), €50 (23-1h), €70 (1-6h). Free between 16h–20h.
-5. Can I cancel? → Free until 5 days before arrival.
-6. Shuttle to Disneyland? → No. Use public buses (€2–€3).
-7. Modifying my booking? → Contact the booking platform. If booked directly, contact us.
-8. Airport to Disney? → RER B from CDG to Châtelet, then RER A to Marne-la-Vallée.
-9. Can I leave bags before/after check-in? → No, but we offer luggage storage.
-10. Linen provided? → Yes. Sheets and towels included.
-11. Essentials provided? → Yes. Coffee, tea, soap, dishwasher tabs.
-12. Parties allowed? → No. Guests and events are not permitted.
-13. Why is a deposit required? → To cover damage. It’s a temporary bank hold, released 7 days after checkout.
-
----
-
-FAQ EN FRANÇAIS
-
-1. 🕓 Check-in → entre 16h00 et 20h00. Agent via WhatsApp le jour d’arrivée.
-2. 🧳 Bagagerie → Oui : 15 €, 7,50 €, 5 € selon taille. Réservation via WhatsApp : +33 6 66 41 52 23.
-3. ⏱️ Enregistrement anticipé → Oui si dispo : 40 € (6–13h), 25 € (13–15h), gratuit après 16h.
-4. 🌙 Check-in tardif → 25 € (20–23h), 50 € (23–1h), 70 € (1–6h).
-5. ❌ Annulation → Gratuite jusqu’à 5 jours avant l’arrivée.
-6. 🚍 Navette Disneyland → Non. Bus locaux à 2–3 €.
-7. 🔄 Modifier réservation → Contactez la plateforme. Réservation directe = contactez-nous.
-8. ✈️ Aéroport à Disney → RER B (CDG → Châtelet), puis RER A → Marne-la-Vallée.
-9. 🧳 Laisser les bagages → Non. Utilisez notre service de bagagerie.
-10. 🛏️ Linge de maison → Oui. Draps et serviettes fournis.
-11. ☕ Produits essentiels → Café, thé, savon, pastilles.
-12. 🚫 Fêtes/interdits → Non autorisées.
-13. 💳 Caution → Empreinte bancaire temporaire, libérée après le départ.
 
 
 Question FAQ 1 :
