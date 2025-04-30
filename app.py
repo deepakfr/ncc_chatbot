@@ -541,7 +541,7 @@ def ask_groq(prompt):
         "Content-Type": "application/json"
     }
     data = {
-        "model": "mixtral-8x7b",  # Use the short version
+        "model": "gemma-7b-it",  # Use the short version
         "messages": [
             {"role": "user", "content": "What time is check-in?"}
         ],
