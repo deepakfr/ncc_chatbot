@@ -1,6 +1,8 @@
 import streamlit as st
 import requests
 from langdetect import detect
+from gtts import gTTS
+from io import BytesIO
 
 # --- Groq API config ---
 GROQ_API_KEY = "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"
@@ -85,32 +87,30 @@ FAQ EN FRANÇAIS
 """
 
 # --- Function to call Groq
+# --- Groq API call ---
 def ask_groq(prompt):
     url = "https://api.groq.com/openai/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "model": GROQ_MODEL,
-        "messages": [{"role": "user", "content": prompt}]
-    }
+    headers = {"Authorization": f"Bearer {GROQ_API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": GROQ_MODEL, "messages": [{"role": "user", "content": prompt}]}
 
     try:
         res = requests.post(url, headers=headers, json=payload)
         res.raise_for_status()
         data = res.json()
-
         if "choices" in data and data["choices"]:
             return data["choices"][0]["message"]["content"]
         else:
             return "Erreur : aucune réponse retournée par l'API."
     except requests.exceptions.RequestException as e:
         return f"Erreur API : {e}"
-    except KeyError as e:
-        return f"Erreur dans le traitement de la réponse : {e}"
 
-
+# --- Text-to-Speech Function ---
+def speak(text, lang):
+    tts = gTTS(text=text, lang=lang)
+    audio_bytes = BytesIO()
+    tts.write_to_fp(audio_bytes)
+    audio_bytes.seek(0)
+    return audio_bytes
 
 # --- Streamlit UI ---
 st.set_page_config(page_title="NC FAQ Chatbot", page_icon="🤖")
@@ -120,18 +120,24 @@ st.markdown("Posez vos questions / Ask your questions (🇫🇷 / 🇬🇧)")
 user_input = st.text_input("💬 Votre question ici / Type your question here:")
 
 if user_input:
-    lang = detect(user_input)
+    lang_detected = detect(user_input)
+    lang_tts = 'fr' if lang_detected == 'fr' else 'en'
+
     prompt = f"""
-You are a polite multilingual FAQ assistant for NC Conciergerie.
+    You are a polite multilingual FAQ assistant for NC Conciergerie.
 
-User language: {lang.upper()}
-FAQ knowledge base:
-{faq_context}
+    User language: {lang_detected.upper()}
+    FAQ knowledge base:
+    {faq_context}
 
-User's question:
-{user_input}
+    User's question:
+    {user_input}
 
-Respond in the user's language. Keep it short, friendly, and accurate.
-"""
+    Respond in the user's language. Keep it short, friendly, and accurate.
+    """
+
     answer = ask_groq(prompt)
     st.markdown(f"**🧠 Réponse / Answer:**\n\n{answer}")
+
+    audio = speak(answer, lang_tts)
+    st.audio(audio, format="audio/mp3", start_time=0)
